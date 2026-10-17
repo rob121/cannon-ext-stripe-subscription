@@ -1,0 +1,98 @@
+{{if .Notice}}<div class="admin-alert admin-alert-success">{{.Notice}}</div>{{end}}
+
+<div class="stripe-admin">
+  <div class="stripe-admin-toolbar">
+    <div class="admin-page-actions">
+      <a class="btn-admin-outline" href="{{.BasePath}}" data-turbo-frame="_top"><i class="bi bi-arrow-left"></i> Overview</a>
+      <a class="btn-admin-outline" href="{{.BasePath}}/subscribers" data-turbo-frame="_top"><i class="bi bi-people"></i> Subscribers</a>
+    </div>
+    {{if .CanManage}}
+    <a class="btn-admin-primary" href="{{.BasePath}}/products/new" data-turbo-frame="_top"><i class="bi bi-plus-lg"></i> Add Product</a>
+    {{end}}
+  </div>
+
+  <div class="admin-data-card">
+    <div class="admin-data-card-header stripe-admin-card-header">
+      <div class="admin-data-card-summary-main">
+        <h2 class="admin-data-card-title">Products</h2>
+        <p class="admin-data-card-desc">Plans mapped to Stripe Price IDs (<code class="admin-code">price_…</code>).</p>
+      </div>
+      {{if .CanManage}}
+      <a class="btn-admin-outline btn-admin-sm" href="{{.BasePath}}/products/new" data-turbo-frame="_top">Add Product</a>
+      {{end}}
+    </div>
+    <div class="admin-table-scroll">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Cost</th>
+            <th>Period</th>
+            <th>Price ID</th>
+            <th>Mode</th>
+            <th>Status</th>
+            <th class="admin-col-actions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Rows}}
+          <tr>
+            <td><span class="admin-cell-primary">{{.Name}}</span></td>
+            <td>${{printf "%.2f" .Cost}}</td>
+            <td>{{.Period}}</td>
+            <td><code class="admin-code">{{if .TestMode}}{{.StripeTestPriceID}}{{else}}{{.StripePriceID}}{{end}}</code></td>
+            <td>{{if .TestMode}}Test{{else}}Live{{end}}</td>
+            <td>
+              {{if eq .Status "active"}}
+              <span class="admin-badge admin-badge-active"><span class="admin-badge-dot"></span>Active</span>
+              {{else}}
+              <span class="admin-badge admin-badge-inactive"><span class="admin-badge-dot"></span>Inactive</span>
+              {{end}}
+            </td>
+            <td class="admin-col-actions">
+              <div class="admin-row-actions">
+                <a class="btn-admin-icon" href="{{$.BasePath}}/products/{{.ID}}" data-turbo-frame="_top" title="Edit"><i class="bi bi-pencil"></i></a>
+                {{if $.CanManage}}
+                <form method="post" action="{{$.BasePath}}/products/{{.ID}}/delete" class="admin-inline-form" onsubmit="return confirm('Delete this product?')">
+                  {{$.CSRFField}}
+                  <button type="submit" class="btn-admin-icon btn-admin-icon-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                </form>
+                {{end}}
+              </div>
+            </td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="7" class="admin-table-empty-cell">
+              <div class="admin-empty-state">
+                <div class="admin-empty-state-icon"><i class="bi bi-box"></i></div>
+                <div class="admin-empty-state-title">No products yet</div>
+                <p class="admin-empty-state-desc">Add a plan and paste its Stripe Price ID, then attach it to a product page route.</p>
+                {{if .CanManage}}
+                <div class="admin-empty-state-action">
+                  <a class="btn-admin-primary btn-admin-sm" href="{{.BasePath}}/products/new" data-turbo-frame="_top"><i class="bi bi-plus-lg"></i> Add Product</a>
+                </div>
+                {{end}}
+              </div>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<style>
+  .admin-extension-app .stripe-admin { display: flex; flex-direction: column; gap: 1.5rem; }
+  .admin-extension-app .stripe-admin-toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1rem;
+  }
+  .admin-extension-app .stripe-admin-card-header {
+    display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 1rem;
+  }
+  @media (max-width: 640px) {
+    .admin-extension-app .stripe-admin-toolbar,
+    .admin-extension-app .stripe-admin-card-header { flex-direction: column; align-items: stretch; }
+  }
+</style>

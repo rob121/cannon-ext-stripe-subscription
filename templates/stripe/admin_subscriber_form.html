@@ -1,0 +1,79 @@
+{{if .Error}}<div class="admin-alert admin-alert-danger">{{.Error}}</div>{{end}}
+
+<div class="stripe-admin">
+  <div class="stripe-admin-toolbar">
+    <div class="admin-page-actions">
+      <a class="btn-admin-outline" href="{{.CancelURL}}" data-turbo-frame="_top"><i class="bi bi-arrow-left"></i> Back to Subscribers</a>
+    </div>
+  </div>
+
+  <div class="admin-data-card">
+    <div class="admin-data-card-header">
+      <div class="admin-data-card-summary-main">
+        <h2 class="admin-data-card-title">{{.Title}}</h2>
+        <p class="admin-data-card-desc">{{.Subtitle}}</p>
+      </div>
+    </div>
+    <form method="post" action="{{.ActionURL}}" class="admin-form stripe-admin-form">
+      {{.CSRFField}}
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="admin-form-label">User ID</label>
+          <input class="admin-form-control" name="user_id" type="number" value="{{.Row.UserID}}" required>
+          {{if .UserLabel}}
+          <div class="form-text">{{.UserLabel}}</div>
+          {{end}}
+        </div>
+        <div class="col-md-4">
+          <label class="admin-form-label">Product</label>
+          <select class="admin-form-control" name="product_id" required>
+            <option value="">Select product</option>
+            {{range .Products}}
+            <option value="{{.ID}}" {{if eq $.Row.ProductID .ID}}selected{{end}}>{{.Name}}</option>
+            {{end}}
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="admin-form-label">Status</label>
+          <select class="admin-form-control" name="status">
+            {{range $.Statuses}}
+            <option value="{{.}}" {{if eq $.Row.Status .}}selected{{end}}>{{.}}</option>
+            {{end}}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="admin-form-label">Stripe Customer ID</label>
+          <input class="admin-form-control" name="stripe_customer_id" value="{{.Row.StripeCustomerID}}" placeholder="cus_…">
+        </div>
+        <div class="col-md-6">
+          <label class="admin-form-label">Stripe Subscription ID</label>
+          <input class="admin-form-control" name="stripe_subscription_id" value="{{.Row.StripeSubscriptionID}}" placeholder="sub_…">
+        </div>
+        <div class="col-md-6">
+          <label class="admin-form-label">Start Date</label>
+          <input class="admin-form-control" name="start_at" type="date" value="{{if .Row.StartAt}}{{.Row.StartAt.Format "2006-01-02"}}{{end}}">
+        </div>
+        <div class="col-md-6">
+          <label class="admin-form-label">End Date</label>
+          <input class="admin-form-control" name="end_at" type="date" value="{{if .Row.EndAt}}{{.Row.EndAt.Format "2006-01-02"}}{{end}}">
+        </div>
+      </div>
+      <div class="admin-form-actions">
+        <button type="submit" class="btn-admin-primary">Save</button>
+        <a class="btn-admin-outline" href="{{.CancelURL}}" data-turbo-frame="_top">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .admin-extension-app .stripe-admin { display: flex; flex-direction: column; gap: 1.5rem; }
+  .admin-extension-app .stripe-admin-toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1rem;
+  }
+  .admin-extension-app .stripe-admin-form { padding: 1.25rem 1.5rem 1.5rem; }
+  .admin-extension-app .stripe-admin-form .admin-form-actions {
+    display: flex; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--admin-border);
+  }
+</style>

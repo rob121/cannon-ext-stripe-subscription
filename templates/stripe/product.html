@@ -1,0 +1,31 @@
+<section class="stripe-product py-4 w-100">
+  <header class="mb-4">
+    <h1 class="mb-2">{{.Title}}</h1>
+    {{if .IntroductionHTML}}<div class="lead text-muted stripe-richtext">{{.IntroductionHTML}}</div>{{end}}
+  </header>
+
+  <div class="mb-4">
+    <h2 class="h4">{{.Product.Name}}</h2>
+    {{if .DescriptionHTML}}<div class="mb-3 stripe-richtext">{{.DescriptionHTML}}</div>{{end}}
+    <p class="fs-5 mb-0">
+      <strong>${{money .Product.Cost}}</strong>
+      <span class="text-muted">/ {{.Product.Period}}</span>
+    </p>
+  </div>
+
+  {{if .HasActive}}
+  <p class="mb-3">You already have an active subscription for this plan.</p>
+  <a class="btn btn-primary" href="{{.AccountPath}}">Manage subscription</a>
+  {{else if .Authenticated}}
+  <form method="post" action="{{.CheckoutPath}}">
+    {{.CSRFField}}
+    <input type="hidden" name="product_id" value="{{.Product.ID}}">
+    <input type="hidden" name="account_path" value="{{.AccountPath}}">
+    <input type="hidden" name="cancel_path" value="{{.SelfPath}}">
+    <input type="hidden" name="success_path" value="/subscribe/return">
+    <button type="submit" class="btn btn-primary">Subscribe</button>
+  </form>
+  {{else}}
+  <a class="btn btn-primary" href="{{.LoginURL}}">Sign in to subscribe</a>
+  {{end}}
+</section>

@@ -1,0 +1,15 @@
+<section class="stripe-return py-4 w-100">
+  <header class="mb-4">
+    <h1 class="mb-2">{{.Title}}</h1>
+    {{if .Introduction}}<div class="lead text-muted">{{nl2br .Introduction}}</div>{{end}}
+  </header>
+
+  {{if .Error}}
+  <div class="alert alert-warning">{{.Error}}</div>
+  <p class="mb-3">If you completed payment, your subscription may still appear shortly after Stripe confirms it.</p>
+  {{else}}
+  <div class="alert alert-success">{{.Notice}}</div>
+  {{end}}
+
+  <a class="btn btn-primary" href="{{.AccountPath}}">View my subscriptions</a>
+</section>

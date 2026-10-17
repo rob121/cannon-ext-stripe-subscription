@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="4.0" method="upgrade">
+    <name>com_subscription</name>
+    <creationDate>2024-06-14</creationDate>
+    <copyright>2024 Rob</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Rob</author>
+    <authorEmail>pr@floridarangers.com</authorEmail>
+    <authorUrl>http://floridarangers.com</authorUrl>
+    <version>CVS: 1.0.0</version>
+    <description></description>
+    <namespace path="src">Sub\Component\Subscription</namespace>
+    
+    <scriptfile>script.php</scriptfile>
+    
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update> <!-- Runs on update -->
+        <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+        </schemas>
+    </update>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    
+
+    <files folder="site">
+        <folder>src</folder>
+        <folder>forms</folder>
+        <folder>tmpl</folder>
+    </files>
+    <media destination="com_subscription" folder="media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+    <languages folder="site/languages">
+        
+			<language tag="en-GB">en-GB/com_subscription.ini</language>
+    </languages>
+    <administration>
+        <menu>COM_SUBSCRIPTION</menu>
+        <submenu>
+            
+			<menu link="option=com_subscription&amp;view=products" view="products" alt="Subscription/Products">COM_SUBSCRIPTION_TITLE_PRODUCTS</menu>
+
+			<menu link="option=com_subscription&amp;view=subscribers" view="subscribers" alt="Subscription/Subscribers">COM_SUBSCRIPTION_TITLE_SUBSCRIBERS</menu>
+
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+        <languages folder="administrator/languages">
+            
+			<language tag="en-GB">en-GB/com_subscription.ini</language>
+			<language tag="en-GB">en-GB/com_subscription.sys.ini</language>
+        </languages>
+    </administration>
+    <config>
+        <fields name="params">
+            <fieldset name="component">
+                <field name="save_history" default="0" />
+            </fieldset>
+        </fields>
+    </config>
+    <plugins>
+    </plugins>
+    
+
+    <updateservers>
+        <server type="extension" priority="1" name="com_subscription">https://nocdn.component-creator.com/index.php?task=builder.preupdatecheckhook&amp;option=com_combuilder&amp;component=MzcxNjEtMjExOTky</server>
+    </updateservers>
+</extension>
+<!-- Component built by the Joomla Component Creator -->
+<!-- http://www.component-creator.com/ -->

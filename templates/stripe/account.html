@@ -1,0 +1,50 @@
+<section class="stripe-account py-4 w-100">
+  <header class="mb-4">
+    <h1 class="mb-2">{{.Title}}</h1>
+    {{if .Introduction}}<div class="lead text-muted">{{nl2br .Introduction}}</div>{{end}}
+  </header>
+  {{if .Error}}<div class="alert alert-danger" role="alert">{{.Error}}</div>{{end}}
+  {{if .Notice}}<div class="alert alert-success" role="status">{{.Notice}}</div>{{end}}
+
+  {{if .Rows}}
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Plan</th>
+          <th>Status</th>
+          <th>Started</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Rows}}
+        <tr>
+          <td>{{if .ProductName}}{{.ProductName}}{{else}}Product #{{.ProductID}}{{end}}</td>
+          <td>{{.Status}}</td>
+          <td>{{if .StartDisplay}}{{.StartDisplay}}{{else}}—{{end}}</td>
+          <td class="text-end">
+            {{if .CanManage}}
+            <form method="post" action="{{$.PortalPath}}" class="d-inline">
+              {{$.CSRFField}}
+              <input type="hidden" name="customer_id" value="{{.StripeCustomerID}}">
+              <input type="hidden" name="return_path" value="{{$.SelfPath}}">
+              <button type="submit" class="btn btn-outline-secondary btn-sm">Manage payment</button>
+            </form>
+            <form method="post" action="{{$.CancelPath}}" class="d-inline ms-1" onsubmit="return confirm('Cancel this subscription immediately?')">
+              {{$.CSRFField}}
+              <input type="hidden" name="subscriber_id" value="{{.ID}}">
+              <input type="hidden" name="return_path" value="{{$.SelfPath}}">
+              <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
+            </form>
+            {{end}}
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+  {{else}}
+  <div class="alert alert-info mb-0">You do not have any subscriptions yet.</div>
+  {{end}}
+</section>
