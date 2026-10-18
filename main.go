@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/rob121/cannon/extension"
 )
@@ -23,7 +24,7 @@ const (
 	extensionName        = "cannon-ext-stripe-subscription"
 	extensionTitle       = "Stripe Subscriptions"
 	extensionDescription = "Sell recurring plans with Stripe Checkout, Customer Portal, and webhooks. Admin manages products and subscribers."
-	extensionVersion     = "0.1.6"
+	extensionVersion     = "0.1.7"
 	updateURLBase        = "https://github.com/rob121/cannon-ext-stripe-subscription/releases/download"
 	defaultAdminMenu     = "Subscriptions"
 	pageSize             = 20
@@ -97,6 +98,9 @@ type stripeApp struct {
 	settingsTable    string
 	productsTable    string
 	subscribersTable string
+
+	schemaOnce sync.Once
+	schemaErr  error
 }
 
 func main() {

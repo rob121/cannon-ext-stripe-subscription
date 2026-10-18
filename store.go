@@ -79,13 +79,18 @@ func (app *stripeApp) db() (*gorm.DB, error) {
 }
 
 func (app *stripeApp) migrateTables(db *gorm.DB) error {
-	if err := extension.MigrateConfigurationStore(db, app.settingsTable); err != nil {
-		return err
-	}
-	if err := db.Table(app.productsTable).AutoMigrate(&product{}); err != nil {
-		return err
-	}
-	return db.Table(app.subscribersTable).AutoMigrate(&subscriber{})
+	app.schemaOnce.Do(func() {
+		app.schemaErr = extension.MigrateConfigurationStore(db, app.settingsTable)
+		if app.schemaErr != nil {
+			return
+		}
+		if err := db.Table(app.productsTable).AutoMigrate(&product{}); err != nil {
+			app.schemaErr = err
+			return
+		}
+		app.schemaErr = db.Table(app.subscribersTable).AutoMigrate(&subscriber{})
+	})
+	return app.schemaErr
 }
 
 func (app *stripeApp) loadSettings() (stripeSettings, error) {
