@@ -24,7 +24,7 @@ const (
 	extensionName        = "cannon-ext-stripe-subscription"
 	extensionTitle       = "Stripe Subscriptions"
 	extensionDescription = "Sell recurring plans with Stripe Checkout, Customer Portal, and webhooks. Admin manages products and subscribers."
-	extensionVersion     = "0.1.7"
+	extensionVersion     = "0.1.8"
 	updateURLBase        = "https://github.com/rob121/cannon-ext-stripe-subscription/releases/download"
 	defaultAdminMenu     = "Subscriptions"
 	pageSize             = 20
@@ -146,6 +146,7 @@ func newServer() (*stripeApp, *extension.Server) {
 	}, configStore{table: app.settingsTable}))
 
 	s.OnPageList(app.pageDefinitions)
+	s.OnPageCatalog(app.pageCatalog)
 	s.RegisterPage(extension.PageDefinition{ID: "product", Title: "Subscription Product"}, app.productPage)
 	s.RegisterPage(extension.PageDefinition{ID: "account", Title: "My Subscriptions"}, app.accountPage)
 	s.RegisterPage(extension.PageDefinition{ID: "return", Title: "Checkout Return"}, app.returnPage)
