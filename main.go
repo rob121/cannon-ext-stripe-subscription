@@ -22,9 +22,12 @@ var templateFiles embed.FS
 
 const (
 	extensionName        = "cannon-ext-stripe-subscription"
+	permStripeView       = extensionName + ".stripe.view"
+	permStripeManage     = extensionName + ".stripe.manage"
+	permStripeSetup      = extensionName + ".stripe.setup"
 	extensionTitle       = "Stripe Subscriptions"
 	extensionDescription = "Sell recurring plans with Stripe Checkout, Customer Portal, and webhooks. Admin manages products and subscribers."
-	extensionVersion     = "0.1.8"
+	extensionVersion     = "0.1.9"
 	updateURLBase        = "https://github.com/rob121/cannon-ext-stripe-subscription/releases/download"
 	defaultAdminMenu     = "Subscriptions"
 	pageSize             = 20

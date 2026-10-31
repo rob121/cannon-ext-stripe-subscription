@@ -367,14 +367,14 @@ func adminCanView(req extension.WireRequest) bool {
 	if !userHasPermissions(req) {
 		return true
 	}
-	return extension.UserCan(req, "stripe.view") || extension.UserCan(req, "stripe.manage")
+	return extension.UserCan(req, permStripeView) || extension.UserCan(req, permStripeManage)
 }
 
 func adminCanManage(req extension.WireRequest) bool {
 	if !userHasPermissions(req) {
 		return true
 	}
-	return extension.UserCan(req, "stripe.manage")
+	return extension.UserCan(req, permStripeManage)
 }
 
 func userHasPermissions(req extension.WireRequest) bool {
